@@ -1,0 +1,61 @@
+[
+{
+    "user ID":"user1",
+    "Name":"Joe Benston",
+    "Location":"Texas,US",
+    "Gender":"M",
+    "DOB":1997,
+    "Joined":"10-06-2021",
+    "Active on":"Mobile",
+    "Tendency":"Visits/Buys few times a year",
+    "Is Member":"No"
+}
+,
+{
+    "user ID":"user2",
+    "Name":"Sanya Mathew",
+    "Location":"Telangana,India",
+    "Gender":"F",
+    "DOB":"01-01-1990",
+    "Joined":"15-01-2022",
+    "Active on":"Website",
+    "Tendency":"Orders frequently,Raises complaints",
+    "Is Member":"Yes"
+}
+,
+{
+    "user ID":"user3",
+    "Name":"Sam VJ",
+    "Location":"Tamil Nadu,India",
+    "Gender":"F",
+    "DOB":null,
+    "Joined":"23-04-2022",
+    "Active on":"Mobile/Website",
+    "Tendency":"Visits frequently,Hasn't ordered",
+    "Is Member":"No"
+}
+,
+{
+    "user ID":"user4",
+    "Name":"Max Bax",
+    "Location":"New York,US",
+    "Gender":"M",
+    "DOB":1982,
+    "Joined":"16-08-2021",
+    "Active on":"Website",
+    "Tendency":"Visited long ago,abandoned",
+    "Is Member":"No"
+}
+,
+{
+    "user ID":"user5",
+    "Name":"Maxwell Baxton",
+    "Location":"New York,US",
+    "Gender":"M",
+    "DOB":"05-03-1982",
+    "Joined":"31-05-2022",
+    "Active on":"Website",
+    "Tendency":"Has visited/bought once",
+    "Is Member":"No"
+}
+]
