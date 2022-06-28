@@ -1,0 +1,1 @@
+select * from {{ source('ecommerce', 'tracks') }} where timestamp >= '{{ var('start_date') }}'

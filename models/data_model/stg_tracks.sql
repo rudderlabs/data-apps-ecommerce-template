@@ -1,0 +1,1 @@
+select user_id, event_text, count(*) from {{ source('ecommerce', 'tracks') }} group by 1, 2
