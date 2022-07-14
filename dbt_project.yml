@@ -40,3 +40,4 @@ models:
 vars:
   start_date: '2021-05-01'
   end_date: '2022-06-29'
+  id_stitcher_name: 'MATERIAL_DOMAIN_PROFILE__IDSTITCHER_DC3F9DA0_12'

@@ -1,1 +1,0 @@
-select user_id, event_text, count(*) from analytics_db.data_apps_simulated.tracks group by 1, 2
