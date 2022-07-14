@@ -1,15 +1,11 @@
-Welcome to your new dbt project!
+# data-apps-ecommerce-template
+## Synthetic Data Creation
+Created a sample product catalogue.  
+Created 5 users.  
+Simulated the users' journeys following e-commerce specs.  
 
-### Using the starter project
+## Feature Store Generation
+_**Currently available**_: Feature table for user traits, obtained from stg_user_traits.sql<br>
+_**Upcoming features**_: Engagement features, Revenue-based features, Pre-revenue features, SKU based features
 
-Try running the following commands:
-- dbt run
-- dbt test
-
-
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+Find the complete feature list and description [here](https://www.notion.so/rudderstacks/e-commerce-feature-store-template-0a12e97a3c554b3c8b131850358a7d3e).
