@@ -3,7 +3,8 @@ with cte_id_stitched_order_completed as
 ANALYTICS_DB.DATA_APPS_SIMULATED.{{var('id_stitcher_name')}} b 
 on (a.user_id = b.other_id and b.other_id_type = 'user_id'))
 
-select main_id, avg(array_size(parse_json(properties_products))) as avg_units_per_transaction 
-from cte_id_stitched_order_completed
+select main_id,
+array_agg(distinct t.value['{{var('category_ref_var')}}']) as {{ var('category_ref_var') }} 
+from cte_id_stitched_order_completed, TABLE(FLATTEN(parse_json(properties_products))) t
 where timestamp >= '{{ var('start_date') }}' and timestamp <= '{{ var('end_date') }}' and main_id is not null
 group by main_id

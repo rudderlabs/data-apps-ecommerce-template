@@ -38,7 +38,10 @@ models:
       +materialized: view
 
 vars:
-  start_date: '2021-05-01'
-  end_date: '2022-06-29'
-  lookback_days: [7,30,90,365]
+  start_date: '2021-05-01'              #This is the lower bound on date
+  end_date: '2022-06-29'                #This is the upper bound on date
+  lookback_days: [7,30,90,365]          #These are the days upto which the lookback features will be computed
+  card_types: ('mastercard', 'visa')    #These are the types of credit cards(in lowercase) that will be considered to check if the user has a credit card 
+  product_ref_var: 'product_id'         #This is the name of the property in the tracks calls that uniquely corresponds to the product
+  category_ref_var: 'category_l1'       #This is the name of the property in the tracks calls that corresponds to the product category
   id_stitcher_name: 'MATERIAL_DOMAIN_PROFILE__IDSTITCHER_DC3F9DA0_12'
