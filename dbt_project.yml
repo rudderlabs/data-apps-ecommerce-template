@@ -32,5 +32,5 @@ vars:
   card_types: ('mastercard', 'visa')    #These are the types of credit cards(in lowercase) that will be considered to check if the user has a credit card 
   product_ref_var: 'product_id'         #This is the name of the property in the tracks calls that uniquely corresponds to the product
   category_ref_var: 'category_l1'       #This is the name of the property in the tracks calls that corresponds to the product category
-  session_cutoff_in_sec: 7200
+  session_cutoff_in_sec: 1800           # A session is a continuous sequence of events, as long as the events are within this interval. If two consecutive events occur at an interval of greater than this, a new session is created.
   id_stitcher_name: 'MATERIAL_DOMAIN_PROFILE__IDSTITCHER_DC3F9DA0_12'
