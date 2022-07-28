@@ -11,6 +11,6 @@ from cte_id_stitched_order_completed, TABLE(FLATTEN(parse_json(properties_produc
 where timestamp >= '{{ var('start_date') }}' and timestamp <= '{{ var('end_date') }}' and main_id is not null
 group by main_id, {{var('category_ref_var')}})
 
-select b.main_id, {{ var('category_ref_var') }} as highest_transacted_category 
-from cte_category_vs_transactions b
-where no_of_transactions = (select max(no_of_transactions) from cte_category_vs_transactions a where a.main_id = b.main_id)
+select main_id, {{ var('category_ref_var') }} as highest_transacted_category
+from cte_category_vs_transactions
+qualify row_number() over(partition by main_id order by no_of_transactions desc) = 1

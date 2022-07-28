@@ -10,6 +10,6 @@ from cte_id_stitched_order_completed, TABLE(FLATTEN(parse_json(properties_produc
 where timestamp >= '{{ var('start_date') }}' and timestamp <= '{{ var('end_date') }}' and main_id is not null
 group by main_id, {{var('category_ref_var')}})
 
-select b.main_id, {{ var('category_ref_var') }} as highest_spent_category 
-from cte_category_vs_spending b
-where amount_spent = (select max(amount_spent) from cte_category_vs_spending a where a.main_id = b.main_id)
+select main_id, {{ var('category_ref_var') }} as highest_spent_category
+from cte_category_vs_spending
+qualify row_number() over(partition by main_id order by amount_spent desc) = 1
