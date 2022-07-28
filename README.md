@@ -8,14 +8,13 @@ Simulated the users' journeys following e-commerce specs.
 _**Currently available**_:<br>
 Feature table for:<br>
 + user traits, obtained from stg_user_traits.sql<br>
-+ engagement-based features, from stg_engagement_features.sql<br>
++ engagement-based features (including session-based features), from stg_engagement_features.sql<br>
 + revenue-based features, from stg_revenue_features.sql<br>
 + pre-revenue based features, from stg_pre_revenue_features.sql<br>
 + SKU based features, from stg_sku_based_features.sql<br>
 <br>
 
 _**Master features table**_ can be obtained from event_stream_feature_table.sql<br>
-_**Upcoming features**_: Session-based features <br>
 
 Variables for referencing the products and their category can be edited in dbt_project.yaml<br>
 
