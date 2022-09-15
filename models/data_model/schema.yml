@@ -19,4 +19,4 @@ sources:
       - name: checkout_step_completed
       - name: checkout_started
       - name: cart_viewed
-      - name: MATERIAL_DOMAIN_PROFILE__IDSTITCHER_DC3F9DA0_12
+      - name: "{{ var('id_stitcher_name')}}"

@@ -26,6 +26,8 @@ models:
       +materialized: view
 
 vars:
+  event_stream_database: 'analytics_db'  #This is the name of database
+  event_stream_schema: 'data_apps_simulated'     #This is the name of schema
   start_date: '2021-05-01'              #This is the lower bound on date
   end_date: '2022-06-29'                #This is the upper bound on date
   date_format: 'YYYY-MM-DD'             # This is the date format
@@ -35,11 +37,10 @@ vars:
   category_ref_var: 'category_l1'       #This is the name of the property in the tracks calls that corresponds to the product category
   session_cutoff_in_sec: 1800           # A session is a continuous sequence of events, as long as the events are within this interval. If two consecutive events occur at an interval of greater than this, a new session is created.
   main_id: 'main_id'
-  event_stream_database: 'analytics_db'
-  event_stream_schema: 'data_apps_simulated'
 
   #table id stitcher
-  tbl_id_stitcher: "{{ source('ecommerce', 'MATERIAL_DOMAIN_PROFILE__IDSTITCHER_DC3F9DA0_12') }}"
+  tbl_id_stitcher: "{{ source('ecommerce', var('id_stitcher_name')) }}"
+  id_stitcher_name: 'MATERIAL_DOMAIN_PROFILE__IDSTITCHER_DC3F9DA0_12'
   col_id_stitcher_other_id: 'other_id'
   col_id_stitcher_other_id_type: 'other_id_type'
 
