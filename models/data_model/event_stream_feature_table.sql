@@ -1,7 +1,7 @@
 {{ config( materialized = 'incremental', 
 unique_key = 'row_id' ) }} 
 select
-   main_id,
+   {{ var('main_id')}},
    feature_name,
    {{get_end_timestamp()}} as timestamp,
    feature_value_numeric,

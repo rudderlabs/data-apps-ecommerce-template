@@ -6,8 +6,9 @@ unique_key = 'row_id' ) }}
 {% set array_features = dbt_utils.get_column_values(table=ref('event_stream_feature_table'), column='feature_name', where='feature_type=\'array\'') %}
 
 select
-main_id, timestamp,
-    concat_ws(main_id, to_char(timestamp)) as row_id,
+    {{ var('main_id')}}, 
+    timestamp,
+    concat_ws({{ var('main_id')}}, to_char(timestamp)) as row_id,
     {% for feature_name in numeric_features %}
     max(case when feature_name='{{feature_name}}' then feature_value_numeric  
                   end) as {{feature_name}},
@@ -23,5 +24,5 @@ main_id, timestamp,
     {% endfor %}   
 from {{ref('event_stream_feature_table')}}
 where timestamp = {{get_end_timestamp()}}
-group by main_id, timestamp, concat_ws(main_id, to_char(timestamp))
+group by {{ var('main_id')}}, timestamp, concat_ws({{ var('main_id')}}, to_char(timestamp))
 
