@@ -71,5 +71,22 @@ vars:
   tbl_ecommerce_tracks: "{{ source('ecommerce', 'tracks') }}"
   col_ecommerce_tracks_user_id: 'user_id'
   col_ecommerce_tracks_timestamp: 'timestamp'
-  
 
+  #table ecommerce product_added
+  tbl_ecommerce_product_added: "{{ source('ecommerce', 'product_added') }}"
+  col_ecommerce_product_added_user_id: 'user_id'
+  col_ecommerce_product_added_properties_cart_id: 'properties_cart_id'
+  col_ecommerce_product_added_timestamp: 'timestamp'
+
+  #table ecommerce order_completed
+  tbl_ecommerce_order_completed: "{{ source('ecommerce', 'order_completed') }}"
+  col_ecommerce_order_completed_user_id: 'user_id'
+  col_ecommerce_order_completed_properties_total: 'properties_total'
+  col_ecommerce_order_completed_timestamp: timestamp
+  col_ecommerce_order_completed_properties_products: 'properties_products'
+
+  #table ecommerce checkout_step_completed
+  tbl_ecommerce_checkout_step_completed: "{{ source('ecommerce', 'checkout_step_completed') }}"
+  col_ecommerce_checkout_step_completed_user_id: 'user_id'
+  col_ecommerce_checkout_step_completed_payment_method: 'properties_payment_method'
+  col_ecommerce_checkout_step_completed_timestamp: 'timestamp'
