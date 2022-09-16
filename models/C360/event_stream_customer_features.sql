@@ -8,7 +8,7 @@ unique_key = 'row_id' ) }}
 select
     {{ var('main_id')}}, 
     timestamp,
-    concat_ws({{ var('main_id')}}, to_char(timestamp)) as row_id,
+    {{concat_columns(["main_id", "to_char(timestamp)"])}} as row_id,
     {% for feature_name in numeric_features %}
     max(case when feature_name='{{feature_name}}' then feature_value_numeric  
                   end) as {{feature_name}},
@@ -24,5 +24,5 @@ select
     {% endfor %}   
 from {{ref('event_stream_feature_table')}}
 where timestamp = {{get_end_timestamp()}}
-group by {{ var('main_id')}}, timestamp, concat_ws({{ var('main_id')}}, to_char(timestamp))
+group by {{ var('main_id')}}, timestamp, {{concat_columns(["main_id", "to_char(timestamp)"])}}
 
