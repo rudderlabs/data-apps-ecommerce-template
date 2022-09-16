@@ -8,7 +8,7 @@ select
    feature_value_string,
    feature_value_array,
    feature_type,
-   {{concat_columns( ["main_id", "to_char(timestamp)", "feature_name"])}} as row_id 
+   {{concat_columns( [ var('main_id'), "to_char(timestamp)", "feature_name"])}} as row_id 
 from
 (
     select * from {{ref('stg_user_traits')}}
