@@ -20,10 +20,10 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 
 models:
-  data-apps-ecommerce-template:
+  ecommerce_data_model_dbt:
     # Config indicated by + and applies to all files under models/example/
     data_model:
-      +materialized: view
+      +materialized: ephemeral
 
 vars:
   event_stream_database: 'analytics_db'  #This is the name of database
@@ -55,18 +55,6 @@ vars:
   col_ecommerce_identifies_device_type: 'context_device_type'
   col_ecommerce_identifies_gender: 'properties_gender'
   col_ecommerce_identifies_state: 'properties_state'
-
-  #table checkout_step_completed
-  tbl_ecommerce_checkout_step_completed: "{{ source('ecommerce', 'checkout_step_completed') }}"
-  col_ecommerce_checkout_step_completed_user_id: 'user_id'
-  col_ecommerce_checkout_step_completed_payment_method: 'properties_payment_method'
-  col_ecommerce_checkout_step_completed_timestamp: 'timestamp'
-
-  #table order_completed
-  tbl_ecommerce_order_completed: "{{ source('ecommerce', 'order_completed') }}"
-  col_ecommerce_order_completed_user_id: 'user_id'
-  col_ecommerce_order_completed_properties_products: 'properties_products'
-  col_ecommerce_order_completed_timestamp: 'timestamp'
 
   #table ecommerce tracks
   tbl_ecommerce_tracks: "{{ source('ecommerce', 'tracks') }}"
