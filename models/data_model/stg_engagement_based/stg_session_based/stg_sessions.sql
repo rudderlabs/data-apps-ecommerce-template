@@ -1,12 +1,4 @@
-with cte_id_stitched_tracks as (
-
-    select distinct b.{{ var('main_id') }}, 
-    {{ var('col_ecommerce_tracks_timestamp') }} 
-    from {{ var('tbl_ecommerce_tracks') }} a 
-    left join {{ var('tbl_id_stitcher')}} b 
-    on (a.{{ var('col_ecommerce_tracks_user_id')}} = b.{{ var('col_id_stitcher_other_id')}} and b.{{ var('col_id_stitcher_other_id_type')}} = 'user_id')
-
-), cte_incremental_ts as (
+with cte_incremental_ts as (
 
     select {{ var('main_id') }}, 
     {{ var('col_ecommerce_tracks_timestamp') }}, 
@@ -14,7 +6,7 @@ with cte_id_stitched_tracks as (
         partition by {{ var('main_id') }} 
         order by {{ var('col_ecommerce_tracks_timestamp') }} asc
     ),{{ var('col_ecommerce_tracks_timestamp') }}),0) as incremental_ts 
-    from cte_id_stitched_tracks 
+    from {{ ref('tracks') }} 
     where {{timebound( var('col_ecommerce_tracks_timestamp'))}} and {{ var('main_id')}} is not null
     order by {{ var('main_id') }}, {{ var('col_ecommerce_tracks_timestamp') }} asc
 
