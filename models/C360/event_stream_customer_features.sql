@@ -1,5 +1,9 @@
-{{ config( materialized = 'incremental', 
-unique_key = 'row_id' ) }} 
+{{ config( 
+    materialized = 'incremental', 
+    unique_key = 'row_id',
+    incremental_strategy='delete+insert'
+   ) 
+}} 
 
 {% set numeric_features = dbt_utils.get_column_values(table=ref('event_stream_feature_table'), column='feature_name', where='feature_type=\'numeric\'') %}
 {% set string_features = dbt_utils.get_column_values(table=ref('event_stream_feature_table'), column='feature_name', where='feature_type=\'string\'') %}
