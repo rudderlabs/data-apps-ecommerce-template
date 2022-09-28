@@ -4,7 +4,7 @@ with cte_active_days_in_past_n_days as (
         select {{ var('main_id') }},
         count(distinct date({{ var('col_ecommerce_tracks_timestamp') }})) as active_days_in_past_n_days,
         {{lookback_days}} as n_value
-        from {{ ref('tracks') }}
+        from {{ ref('stg_tracks') }}
         where datediff(day, date({{ var('col_ecommerce_tracks_timestamp') }}), date({{get_end_timestamp()}})) <= {{lookback_days}} and {{timebound( var('col_ecommerce_tracks_timestamp'))}} and {{ var('main_id')}} is not null
         group by {{ var('main_id') }}
     {% if not loop.last %} union {% endif %}

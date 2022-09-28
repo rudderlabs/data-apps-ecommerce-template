@@ -3,7 +3,7 @@ with cte_products_added_in_past_n_days as (
         select {{ var('main_id') }},
         array_agg(distinct cast(properties_{{ var('product_ref_var') }} as string)) as products_added_in_past_n_days,
         {{lookback_days}} as n_value
-        from {{ ref('product_added') }}
+        from {{ ref('stg_product_added') }}
         where datediff(day, date({{ var('col_ecommerce_product_added_timestamp') }}), date({{get_end_timestamp()}})) <= {{lookback_days}} and {{timebound( var('col_ecommerce_product_added_timestamp'))}} and {{ var('main_id')}} is not null
         group by {{ var('main_id') }}
         {% if not loop.last %} union {% endif %}

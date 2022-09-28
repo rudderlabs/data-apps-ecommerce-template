@@ -2,11 +2,11 @@ with cte_incremental_ts as (
 
     select {{ var('main_id') }}, 
     {{ var('col_ecommerce_tracks_timestamp') }}, 
-    coalesce(datediff(second, lag({{ var('col_ecommerce_tracks_timestamp') }}, 1, {{ var('col_ecommerce_tracks_timestamp') }}) over(
+    coalesce(datediff(second, {{ lag( var('col_ecommerce_tracks_timestamp'))}} over(
         partition by {{ var('main_id') }} 
         order by {{ var('col_ecommerce_tracks_timestamp') }} asc
     ),{{ var('col_ecommerce_tracks_timestamp') }}),0) as incremental_ts 
-    from {{ ref('tracks') }} 
+    from {{ ref('stg_tracks') }} 
     where {{timebound( var('col_ecommerce_tracks_timestamp'))}} and {{ var('main_id')}} is not null
     order by {{ var('main_id') }}, {{ var('col_ecommerce_tracks_timestamp') }} asc
 
@@ -23,7 +23,7 @@ with cte_incremental_ts as (
     {{ var('col_ecommerce_tracks_timestamp') }}, 
     sum(new_session) over(
         partition by {{ var('main_id') }} 
-        order by {{ var('col_ecommerce_tracks_timestamp') }} asc
+        order by {{ var('col_ecommerce_tracks_timestamp') }} asc {{frame_clause()}}
         ) as session_id 
     from cte_new_session
 )
