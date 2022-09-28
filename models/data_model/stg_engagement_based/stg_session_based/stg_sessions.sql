@@ -34,5 +34,5 @@ select
     min({{ var('col_ecommerce_tracks_timestamp') }}) as session_start_time, 
     max({{ var('col_ecommerce_tracks_timestamp') }}) as session_end_time 
 from cte_session_id 
-group by 1, 2 
-order by 1, 2
+group by {{ var('main_id') }}, session_id
+order by {{ var('main_id') }}, session_id

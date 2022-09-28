@@ -1,5 +1,5 @@
 {% macro get_end_timestamp() %}
-least(to_timestamp('{{ var('end_date') }}'), current_timestamp())
+least(to_timestamp('{{ var('end_date') }}'), {{ dbt_utils.current_timestamp() }})
 {% endmacro %}
 
 {% macro timebound(column_name) %}
