@@ -1,3 +1,4 @@
+{{ config( materialized = 'table') }} 
 select {{ var('main_id')}}, 'items_purchased_ever' as feature_name, {{get_end_timestamp()}} as end_timestamp, null as feature_value_numeric, null as feature_value_string, {{ var('product_ref_var') }} as feature_value_array, 'array' as feature_type from {{ref('items_purchased_ever')}}
 union
 select {{ var('main_id')}}, '{{ var('category_ref_var') }}_purchased_ever' as feature_name, {{get_end_timestamp()}} as end_timestamp, null as feature_value_numeric, null as feature_value_string, {{ var('category_ref_var') }} as feature_value_array, 'array' as feature_type from {{ref('categories_purchased_ever')}}

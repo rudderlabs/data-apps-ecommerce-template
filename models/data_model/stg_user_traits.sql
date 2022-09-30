@@ -1,3 +1,4 @@
+{{ config( materialized = 'table') }} 
 select * from {{ref('demographics')}}
 union
 select * from {{ref('login_properties')}}

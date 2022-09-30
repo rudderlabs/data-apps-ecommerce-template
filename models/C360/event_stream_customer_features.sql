@@ -11,10 +11,10 @@
 
 select
     {{ var('main_id')}}, 
-    timestamp,
-    {{concat_columns([var('main_id'), "to_char(timestamp)"])}} as row_id,
+    "timestamp",
+    {{concat_columns( [ var('main_id'), use_to_char(get_end_timestamp())])}} as row_id,
     {% for feature_name in numeric_features %}
-    max(case when feature_name='{{feature_name}}' then feature_value_numeric  
+    max(case when feature_name='{{feature_name}}' then feature_value_numeric
                   end) as {{feature_name}},
     {% endfor %} 
      {% for feature_name in string_features%}
@@ -22,11 +22,15 @@ select
                   end) as {{feature_name}},
     {% endfor %}    
     {% for feature_name in array_features%}
-    max(case when feature_name='{{feature_name}}' then array_to_string(feature_value_array,',') 
-                  end) as {{feature_name}}
-                  {%- if not loop.last %},{% endif -%}
+    max(case when feature_name='{{feature_name}}' then
+                {% if target.type == 'redshift' %}
+                feature_value_array
+                {% elif target.type == 'snowflake' %}
+                array_to_string(feature_value_array,',') 
+                {% endif %}
+                end) as {{feature_name}}
+                {%- if not loop.last %},{% endif -%}
     {% endfor %}   
 from {{ref('event_stream_feature_table')}}
 where timestamp = {{get_end_timestamp()}}
-group by {{ var('main_id')}}, timestamp, {{concat_columns([ var('main_id'), "to_char(timestamp)"])}}
-
+group by {{ var('main_id')}}, "timestamp", {{concat_columns( [ var('main_id'), use_to_char(get_end_timestamp())])}}

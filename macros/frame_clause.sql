@@ -1,7 +1,7 @@
-{% macro frame_clause() %}
+{% macro frame_clause(frame_condition = 'rows between unbounded preceding and unbounded following') %}
 
 {% if target.type == 'redshift' %}
-    rows between unbounded preceding and unbounded following
+    {{frame_condition}}
 
 {% else %}
     ""

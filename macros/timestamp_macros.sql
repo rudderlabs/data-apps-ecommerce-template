@@ -1,5 +1,9 @@
 {% macro get_end_timestamp() %}
-least(to_timestamp('{{ var('end_date') }}', '{{ var('date_format')}}'), {{ dbt_utils.current_timestamp() }})
+    {% if var('end_date') == 'now' %}
+    {{ dbt_utils.current_timestamp() }}
+    {% else %}
+    least(to_timestamp('{{ var('end_date') }}', '{{ var('date_format')}}'), {{ dbt_utils.current_timestamp() }})
+    {% endif %}
 {% endmacro %}
 
 {% macro timebound(column_name) %}

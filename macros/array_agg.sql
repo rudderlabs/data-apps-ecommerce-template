@@ -1,7 +1,7 @@
 {% macro array_agg(column_name) %}
 
 {% if target.type == 'redshift' %}
-    listagg({{column_name}}, ', ')
+    listagg( distinct {{column_name}}, ', ')
 {% endif %}
 
 {% if target.type == 'snowflake' %}

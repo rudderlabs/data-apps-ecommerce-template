@@ -1,5 +1,6 @@
 {{ config( materialized = 'incremental', 
 unique_key = 'row_id' ) }} 
+
 select
    {{ var('main_id')}},
    feature_name,
@@ -8,16 +9,51 @@ select
    feature_value_string,
    feature_value_array,
    feature_type,
-   {{concat_columns( [ var('main_id'), "to_char(timestamp)", "feature_name"])}} as row_id 
+   {{concat_columns( [ var('main_id'), use_to_char(get_end_timestamp()), "feature_name"])}} as row_id 
 from
 (
-    select * from {{ref('stg_user_traits')}}
+  select 
+    main_id, 
+    feature_name, 
+    end_timestamp, 
+    cast(feature_value_numeric as real) as feature_value_numeric,
+    cast(feature_value_string as varchar) as feature_value_string, 
+    feature_value_array, 
+    feature_type from  {{ref('stg_user_traits')}}
     union all
-    select * from {{ref('stg_engagement_features')}}
+    select 
+    main_id, 
+    feature_name, 
+    end_timestamp, 
+    cast(feature_value_numeric as real) as feature_value_numeric,
+    cast(feature_value_string as varchar) as feature_value_string, 
+    feature_value_array, 
+    feature_type  from {{ref('stg_engagement_features')}}
     union all
-    select * from {{ref('stg_pre_revenue_features')}}
+    select 
+    main_id, 
+    feature_name, 
+    end_timestamp, 
+    cast(feature_value_numeric as real) as feature_value_numeric,
+    cast(feature_value_string as varchar) as feature_value_string, 
+    feature_value_array, 
+    feature_type from {{ref('stg_pre_revenue_features')}}
     union all
-    select * from {{ref('stg_revenue_features')}}
+    select 
+    main_id, 
+    feature_name, 
+    end_timestamp, 
+    cast(feature_value_numeric as real) as feature_value_numeric,
+    cast(feature_value_string as varchar) as feature_value_string, 
+    feature_value_array, 
+    feature_type  from {{ref('stg_revenue_features')}}
     union all
-    select * from {{ref('stg_sku_based_features')}}
+    select 
+    main_id, 
+    feature_name, 
+    end_timestamp, 
+    cast(feature_value_numeric as real) as feature_value_numeric,
+    cast(feature_value_string as varchar) as feature_value_string, 
+    feature_value_array, 
+    feature_type from {{ref('stg_sku_based_features')}}
 )

@@ -1,6 +1,6 @@
 select 
     distinct {{ var('main_id') }},
-    first_value({{ var('col_ecommerce_order_completed_properties_total') }}) over(
+    first_value({{ var('col_ecommerce_order_completed_properties_total') }}::real) over(
         partition by {{ var('main_id') }} 
         order by case when {{ var('col_ecommerce_order_completed_properties_total') }} is not null then 2 else 1 end desc, 
         {{var('col_ecommerce_order_completed_timestamp')}} desc {{frame_clause()}}

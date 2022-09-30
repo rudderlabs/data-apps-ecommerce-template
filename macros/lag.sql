@@ -1,4 +1,4 @@
-{% macro lag(column_name) %}
+{% macro lag_col(column_name) %}
 
 {% if target.type == 'redshift' %}
     lag({{column_name}}, 1)

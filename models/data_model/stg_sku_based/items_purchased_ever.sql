@@ -1,3 +1,4 @@
+{% if target.type == 'redshift' %}
 with numbers as ({{dbt_utils.generate_series(upper_bound=1000)}}),
 cte_json as ( 
 
@@ -19,5 +20,14 @@ cte_json as (
     from cte_product_data
 
 )
-select {{ var('main_id')}}, {{array_agg( var('product_ref_var') )}} as {{ var('product_ref_var') }}
-from cte_user_product_id group by {{ var('main_id')}}
+{% endif %}
+select {{ var('main_id')}}, 
+    {{array_agg( var('product_ref_var') )}} as {{ var('product_ref_var') }}
+{% if target.type == 'redshift' %}
+from cte_user_product_id
+
+{% else %}
+from {{ ref('order_completed') }}, TABLE(FLATTEN(parse_json({{ var('col_ecommerce_order_completed_properties_products')}}))) t
+where {{timebound( var('col_ecommerce_order_completed_timestamp'))}} and {{ var('main_id')}} is not null
+{% endif %}
+group by {{ var('main_id')}}

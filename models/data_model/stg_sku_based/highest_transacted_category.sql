@@ -1,3 +1,5 @@
+{% if target.type == 'redshift' %}
+
 with numbers as ({{dbt_utils.generate_series(upper_bound=1000)}}),
 cte_json as ( 
 
@@ -18,7 +20,7 @@ cte_json as (
         json_extract_path_text(product_array, '{{ var('category_ref_var') }}') as {{ var('category_ref_var') }}
     from cte_product_data
 
-), cte_category_vs_spending as (
+), cte_category_vs_transactions as (
 
     select {{ var('main_id')}}, 
     {{var('category_ref_var')}} as {{ var('category_ref_var') }},
@@ -26,6 +28,21 @@ cte_json as (
     from cte_user_transacted_category
     group by {{ var('main_id')}}, {{ var('category_ref_var') }}
 )
+
+{% elif target.type == 'snowflake' %}
+
+with cte_category_vs_transactions as (
+
+    select {{ var('main_id')}},
+    t.value['{{var('category_ref_var')}}'] as {{ var('category_ref_var') }},
+    count(t.value['{{var('category_ref_var')}}']) as no_of_transactions
+    from {{ ref('order_completed') }}, TABLE(FLATTEN(parse_json({{ var('col_ecommerce_order_completed_properties_products')}}))) t
+    where {{timebound( var('col_ecommerce_order_completed_timestamp'))}} and {{ var('main_id')}} is not null
+    group by {{ var('main_id')}}, {{var('category_ref_var')}}
+
+)
+
+{% endif %}
 
 select 
     {{ var('main_id')}}, 
@@ -36,5 +53,5 @@ from (
         partition by {{ var('main_id')}} 
         order by no_of_transactions desc
         ) as row_num
-    from cte_category_vs_spending
+    from cte_category_vs_transactions
 ) where row_num = 1

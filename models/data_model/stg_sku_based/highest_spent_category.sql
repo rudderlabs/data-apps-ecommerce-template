@@ -1,3 +1,4 @@
+{% if target.type == 'redshift' %}
 with numbers as ({{dbt_utils.generate_series(upper_bound=1000)}}),
 cte_json as ( 
 
@@ -27,7 +28,16 @@ cte_json as (
     from cte_user_spent_category 
     group by {{ var('main_id')}}, {{ var('category_ref_var') }}
 )
+{% elif target.type == 'snowflake' %}
+with cte_category_vs_spending as (
 
+    select {{ var('main_id')}},
+    t.value['{{var('category_ref_var')}}'] as {{ var('category_ref_var') }}, sum(t.value['price']) as amount_spent
+    from {{ ref('order_completed') }}, TABLE(FLATTEN(parse_json({{ var('col_ecommerce_order_completed_properties_products')}}))) t
+    where {{timebound( var('col_ecommerce_order_completed_timestamp'))}} and {{ var('main_id')}} is not null
+    group by {{ var('main_id')}}, {{var('category_ref_var')}}
+)
+{% endif %}
 select 
     {{ var('main_id')}}, 
     {{ var('category_ref_var') }} as highest_spent_category
