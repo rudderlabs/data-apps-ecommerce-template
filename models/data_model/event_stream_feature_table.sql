@@ -8,7 +8,7 @@
 select
    {{ var('main_id')}},
    feature_name,
-   {{get_end_timestamp()}} as "timestamp",
+   {{get_end_timestamp()}} as {{timestamp_call('timestamp')}},
    feature_value_numeric,
    feature_value_string,
    feature_value_array,
