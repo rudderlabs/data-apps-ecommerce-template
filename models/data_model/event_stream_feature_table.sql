@@ -1,5 +1,9 @@
-{{ config( materialized = 'incremental', 
-unique_key = 'row_id' ) }} 
+{{ config( 
+    materialized = 'incremental', 
+    unique_key = 'row_id',
+    incremental_strategy='delete+insert'
+   ) 
+}} 
 
 select
    {{ var('main_id')}},
@@ -13,7 +17,7 @@ select
 from
 (
   select 
-    main_id, 
+    {{ var('main_id')}}, 
     feature_name, 
     end_timestamp, 
     cast(feature_value_numeric as real) as feature_value_numeric,
@@ -22,7 +26,7 @@ from
     feature_type from  {{ref('stg_user_traits')}}
     union all
     select 
-    main_id, 
+    {{ var('main_id')}}, 
     feature_name, 
     end_timestamp, 
     cast(feature_value_numeric as real) as feature_value_numeric,
@@ -31,7 +35,7 @@ from
     feature_type  from {{ref('stg_engagement_features')}}
     union all
     select 
-    main_id, 
+    {{ var('main_id')}}, 
     feature_name, 
     end_timestamp, 
     cast(feature_value_numeric as real) as feature_value_numeric,
@@ -40,7 +44,7 @@ from
     feature_type from {{ref('stg_pre_revenue_features')}}
     union all
     select 
-    main_id, 
+    {{ var('main_id')}}, 
     feature_name, 
     end_timestamp, 
     cast(feature_value_numeric as real) as feature_value_numeric,
@@ -49,7 +53,7 @@ from
     feature_type  from {{ref('stg_revenue_features')}}
     union all
     select 
-    main_id, 
+    {{ var('main_id')}}, 
     feature_name, 
     end_timestamp, 
     cast(feature_value_numeric as real) as feature_value_numeric,
