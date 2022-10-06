@@ -11,7 +11,7 @@
 
 select
     {{ var('main_id')}}, 
-    "timestamp",
+    {{timestamp_call('timestamp')}},
     {{concat_columns( [ var('main_id'), use_to_char(get_end_timestamp())])}} as row_id,
     {% for feature_name in numeric_features %}
     max(case when feature_name='{{feature_name}}' then feature_value_numeric
@@ -32,5 +32,5 @@ select
                 {%- if not loop.last %},{% endif -%}
     {% endfor %}   
 from {{ref('event_stream_feature_table')}}
-where timestamp = {{get_end_timestamp()}}
-group by {{ var('main_id')}}, "timestamp", {{concat_columns( [ var('main_id'), use_to_char(get_end_timestamp())])}}
+where {{timestamp_call('timestamp')}} = {{get_end_timestamp()}}
+group by {{ var('main_id')}}, {{timestamp_call('timestamp')}}, {{concat_columns( [ var('main_id'), use_to_char(get_end_timestamp())])}}

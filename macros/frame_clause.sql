@@ -2,8 +2,5 @@
 
 {% if target.type == 'redshift' %}
     {{frame_condition}}
-
-{% else %}
-    ""
 {% endif %} 
 {% endmacro %}

@@ -1,4 +1,3 @@
-{{ config( materialized = 'table') }} 
 select {{ var('main_id')}}, 'total_amt_spent' as feature_name, {{get_end_timestamp()}} as end_timestamp, total_amt_spent as feature_value_numeric, null as feature_value_string, null as feature_value_array, 'numeric' as feature_type from {{ref('total_amt_spent')}}
 union
 select {{ var('main_id')}}, 'total_transactions' as feature_name, {{get_end_timestamp()}} as end_timestamp, total_transactions as feature_value_numeric, null as feature_value_string, null as feature_value_array, 'numeric' as feature_type from {{ref('total_transactions')}}

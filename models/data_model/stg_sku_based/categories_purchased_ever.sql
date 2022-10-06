@@ -22,11 +22,12 @@ cte_json as (
 )
 {% endif %}
 select {{ var('main_id')}}, 
-    {{array_agg( var('category_ref_var') )}} as {{ var('category_ref_var') }}
 {% if target.type == 'redshift' %}
+    {{array_agg( var('category_ref_var') )}} as {{ var('category_ref_var') }}
 from cte_user_product_category
 {% else %}
-from {{ ref('order_completed') }} , TABLE(FLATTEN(parse_json({{ var('col_ecommerce_order_completed_properties_products')}}))) t
+array_agg(distinct t.value['{{var('category_ref_var')}}']) as {{ var('category_ref_var') }} 
+from {{ ref('stg_order_completed') }} , TABLE(FLATTEN(parse_json({{ var('col_ecommerce_order_completed_properties_products')}}))) t
 where {{timebound( var('col_ecommerce_order_completed_timestamp'))}} and {{ var('main_id')}} is not null
 {% endif %}
 group by {{ var('main_id')}}

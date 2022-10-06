@@ -1,4 +1,3 @@
-{{ config( materialized = 'table') }} 
 select {{ var('main_id')}}, 'days_since_last_seen' as feature_name, {{get_end_timestamp()}} as end_timestamp, days_since_last_seen as feature_value_numeric, null as feature_value_string, null as feature_value_array, 'numeric' as feature_type from {{ref('days_since_last_seen')}}
 union
 {% for lookback_days in var('lookback_days')%}
