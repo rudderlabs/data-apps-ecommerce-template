@@ -24,10 +24,12 @@ models:
     # Config indicated by + and applies to all files under models/example/
     data_model:
       +materialized: view
+    intermediate: 
+      +materialized: view
 
 vars:
-  event_stream_database: 'ANALYTICS_DB'  #This is the name of database
-  event_stream_schema: 'DATA_APPS_SIMULATED'     #This is the name of schema
+  event_stream_database: 'warehouse_ginkgo'  #This is the name of database
+  event_stream_schema: 'sim_eventstream'     #This is the name of schema
   start_date: '2021-05-01'              #This is the lower bound on date
   end_date: '2022-06-29'                #This is the upper bound on date
   date_format: 'YYYY-MM-DD'             # This is the date format

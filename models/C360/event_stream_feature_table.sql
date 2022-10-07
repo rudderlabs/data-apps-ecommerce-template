@@ -13,7 +13,7 @@ select
    feature_value_string,
    feature_value_array,
    feature_type,
-   {{concat_columns( [ var('main_id'), use_to_char(get_end_timestamp()), "feature_name"])}} as row_id 
+   {{concat_columns( [ var('main_id'), date_to_char(get_end_timestamp()), "feature_name"])}} as row_id 
 from
 (
   select 
