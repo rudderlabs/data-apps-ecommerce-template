@@ -1,0 +1,1 @@
+select {{get_end_date()}}

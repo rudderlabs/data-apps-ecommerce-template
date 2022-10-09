@@ -1,6 +1,6 @@
 select 
     distinct {{ var('main_id')}}, 
-    least(date(getdate()), '{{ var('end_date') }}') - 
+    least(date(getdate()), {{ get_end_date()}}) - 
     date(first_value({{ var('col_ecommerce_identifies_timestamp')}} ) over(
         partition by {{ var('main_id')}} 
         order by {{ var('col_ecommerce_identifies_timestamp')}} asc {{frame_clause()}})
