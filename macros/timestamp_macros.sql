@@ -10,7 +10,7 @@
     {% if var('end_date') == 'now' %}
     to_timestamp('{{ run_started_at.strftime("%Y-%m-%d") }}', '{{ var('date_format')}}')
     {% else %}
-    least(to_timestamp('{{ var('end_date') }}', '{{ var('date_format')}}'), {{ dbt_utils.current_timestamp() }})
+    least(to_timestamp('{{ var('end_date') }}', '{{ var('date_format')}}'), to_timestamp('{{ run_started_at.strftime("%Y-%m-%d") }}', '{{ var('date_format')}}'))
     {% endif %}
 {% endmacro %}
 
