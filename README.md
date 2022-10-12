@@ -5,7 +5,7 @@ The complete list of the features is listed below:
 
 ### Features List
 
-- traits features: These are related to user, which do not, or rarely change. 
+- [traits features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_traits): These are related to user, which do not, or rarely change. 
     1. gender (char)
     2. age_in_years (int)
     3. country (str)
@@ -16,7 +16,7 @@ The complete list of the features is listed below:
     8. is_active_on_website (bool)
     9. days_since_account_creation (int)
     10. payment_modes <list of all payment modes ever (cod, credit card, debit card, wallet etc)> (List[str])
-- Engagement features: These are related to the time a user spends on the website/app.
+- [Engagement features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_engagement_based): These are related to the time a user spends on the website/app.
     1. days_since_last_seen (int)
     2. is_churned_n_days (bool)
     3. active_days_in_past_n_days (int)
@@ -25,7 +25,7 @@ The complete list of the features is listed below:
         2. n_sessions_last_week (int)  
         3. avg_session_length_overall (float)
         4. n_sessions_overall (int)
-- Revenue based features: These are related to the amount users spend
+- [Revenue based features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_revenue_based): These are related to the amount users spend
     1. amt_spent_in_past_n_days (float)
     2. total_amt_spent (float)
     3. last_transaction_value (float)
@@ -37,13 +37,13 @@ The complete list of the features is listed below:
     9. transactions_in_past_n_days (int)
     10. total_transactions (int)
     11. has_credit_card (bool)
-- Pre-revenue features: Related to the pre-checkout engagement features such as cart adds, abandoned carts etc
+- [Pre-revenue features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_pre_revenue_based): Related to the pre-checkout engagement features such as cart adds, abandoned carts etc
     1. carts_in_past_n_days
     2. total_carts
     3. products_added_in_past_n_days (both purchased and not purchased)
     4. total_products_added_to_cart
     5. days_since_last_cart_add (int)
-- SKU based features: Related to the SKU, categories etc. 
+- [SKU based features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_sku_based): Related to the SKU, categories etc. 
     1. items_purchased_ever (List of unique product items, List[str])
     2. categories_purchased_ever (List of unique category ids, List[str])
     3. highest_spent_category (str) (based on the price of the products)
@@ -59,21 +59,21 @@ As long as the events are instrumented following the e-commerce spec, no changes
 
 ```
 
-
 vars:
-  event_stream_database: 'ANALYTICS_DB'  #This is the name of database
-  event_stream_schema: 'DATA_APPS_SIMULATED'     #This is the name of schema
+  event_stream_database: 'ANALYTICS_DB'  #This is the name of database where the event stream tables are all stored.
+  event_stream_schema: 'DATA_APPS_SIMULATED'     #This is the name of schema where the event stream tables are all stored
   start_date: '2000-01-01'              #This is the lower bound on date. Only events after this date would be considered. Typically used to ignore data during test setup days. 
   end_date: 'now'                #This is the upper bound on date .Default is 'now'; It can be modified to some old date to create snapshot of features as of an older timestamp
   date_format: 'YYYY-MM-DD'             # This is the date format
   session_cutoff_in_sec: 1800           # A session is a continuous sequence of events, as long as the events are within this interval. If two consecutive events occur at an interval of greater than this, a new session is created.
-  lookback_days: [7,30,90,365]          #These are the days upto which the lookback features will be computed
+  lookback_days: [7,30,90,365]          # There are various lookback features such as amt_spent_in_past_n_days etc where n takes values from this list. If the list has two values [7, 30], amt_spent_in_past_7_days and amt_spent_in_past_30_days are computed for ex.
   product_ref_var: 'product_id'         #This is the name of the property in the tracks calls that uniquely corresponds to the product
   category_ref_var: 'category_l1'       #This is the name of the property in the tracks calls that corresponds to the product category
+  main_id: 'main_id' # The identifier column name in id graph output table 
 
 ```
 
-Along with the above variables, the table names (variables that start with `tbl_` prefix) may need to be changed depending on the schema. 
+Along with the above variables, the table names (variables that start with `tbl_` prefix) may need to be changed depending on the schema, both in the dbt_project.yml file and in schema.yml file if they deviate from the ecommerce spec. 
 
 
 ### Output:
