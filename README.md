@@ -84,7 +84,9 @@ The `end_date` variable in `dbt_project.yml` can be used to generate the feature
 
 
 ## Synthetic Data Creation
-For an easy setup and trial, a synthetic dataset is supplied along with this project in the `seeds/` directory. 
+For an easy setup and trial, a synthetic dataset is supplied along with this project in the `seeds_data/` directory. If the data is required, rename the folder name to `seeds`.
 It has simulated users' journeys of five users. This can be loaded in customer warehouse with the command [`dbt seed`](https://docs.getdbt.com/docs/building-a-dbt-project/seeds)
-
+These create tables with prefix `SEED_`, in the target schema on warehouse. To use them, the table names should also be modified in the `dbt_project.yml` file.
+**WARNING**
+If there are tables in the warehouse with same name in the target schema, they get replaced with seed file data. Rename the seed files to something unique, in case this situation presents.
 
