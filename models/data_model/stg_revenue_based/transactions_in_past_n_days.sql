@@ -3,7 +3,7 @@ with cte_transactions_in_past_n_days as (
     select {{ var('main_id') }},
     count(distinct date({{ var('col_ecommerce_order_completed_timestamp') }})) as transactions_in_past_n_days,
     {{lookback_days}} as n_value
-    from {{ ref('order_completed') }}
+    from {{ ref('stg_order_completed') }}
     where datediff(day, date({{ var('col_ecommerce_order_completed_timestamp') }}), date({{get_end_timestamp()}})) <= {{lookback_days}} and {{timebound( var('col_ecommerce_order_completed_timestamp'))}} and {{ var('main_id')}} is not null
     group by {{ var('main_id') }}
     {% if not loop.last %} union {% endif %}

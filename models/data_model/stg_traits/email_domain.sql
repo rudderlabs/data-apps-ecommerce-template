@@ -9,6 +9,6 @@ from (
             partition by {{ var('main_id')}} 
             order by {{ var('col_ecommerce_identifies_timestamp')}}  desc
         ) as rn 
-    from {{ ref('identifies')}} 
+    from {{ ref('stg_identifies')}} 
     where {{timebound( var('col_ecommerce_identifies_timestamp'))}} and {{ var('col_ecommerce_identifies_email')}} is not null and {{ var('col_ecommerce_identifies_email')}} != ''
 ) where rn = 1
