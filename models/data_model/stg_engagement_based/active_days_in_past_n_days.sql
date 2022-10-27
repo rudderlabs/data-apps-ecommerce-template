@@ -1,3 +1,7 @@
+{{ config( 
+    materialized = 'view'
+   ) 
+}} 
 with cte_active_days_in_past_n_days as (
 
     {% for lookback_days in var('lookback_days') %}
