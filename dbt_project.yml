@@ -29,8 +29,8 @@ models:
     
 
 vars:
-  event_stream_database: 'warehouse_ginkgo'  #This is the name of database where the event stream tables are all stored
-  event_stream_schema: 'sim_eventstream'     #This is the name of schema where the event stream tables are all stored
+  event_stream_database: 'ANALYTICS_DB'  #This is the name of database where the event stream tables are all stored
+  event_stream_schema: 'DATA_APPS_SIMULATED'     #This is the name of schema where the event stream tables are all stored
   start_date: '2000-01-01'              #This is the lower bound on date. Only events after this date would be considered. Typically used to ignore data during test setup days. 
   end_date: 'now'                #This is the upper bound on date .Default is 'now'; It can be modified to some old date to create snapshot of features as of an older timestamp
   date_format: 'YYYY-MM-DD'             # This is the date format
