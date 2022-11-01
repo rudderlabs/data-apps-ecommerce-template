@@ -23,9 +23,10 @@ models:
   ecommerce_data_model_dbt:
     # Config indicated by + and applies to all files under models/data_model/
     data_model:
-      +materialized: view
+      +materialized: ephemeral
     intermediate: 
-      +materialized: view
+      +materialized: ephemeral
+    
 
 vars:
   event_stream_database: 'ANALYTICS_DB'  #This is the name of database where the event stream tables are all stored
