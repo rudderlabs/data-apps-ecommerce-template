@@ -1,14 +1,10 @@
-select 
-    distinct {{ var('main_id')}}, 
-    email_domain 
-from (
-    select 
-        {{ var('main_id')}},
-        {{get_domain_from_email( var('col_ecommerce_identifies_email') )}} as email_domain, 
-        row_number() over(
-            partition by {{ var('main_id')}} 
-            order by {{ var('col_ecommerce_identifies_timestamp')}}  desc
-        ) as rn 
-    from {{ ref('stg_identifies')}} 
-    where {{timebound( var('col_ecommerce_identifies_timestamp'))}} and {{ var('col_ecommerce_identifies_email')}} is not null and {{ var('col_ecommerce_identifies_email')}} != ''
-) where rn = 1
+
+
+with cte_user_max_time as 
+(select {{ var('main_id') }}, max({{ var('col_ecommerce_identifies_timestamp') }}) as recent_ts from 
+{{ ref('stg_identifies') }} group by 1
+)
+select a.{{ var('main_id') }}, max({{get_domain_from_email( var('col_ecommerce_identifies_email') )}}) as email_domain from {{ ref('stg_identifies') }} a left join 
+cte_user_max_time b on 
+a.{{ var('main_id') }} = b.{{ var('main_id') }}
+group by 1

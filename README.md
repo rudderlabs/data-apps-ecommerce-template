@@ -5,7 +5,7 @@ The complete list of the features is listed below:
 
 ### Features List
 
-- [traits features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_traits): These are related to user, which do not, or rarely change. 
+- [traits features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_traits): These are related to user, which do not, or rarely change. They are created from the latest identify call for a given user
     1. gender (char)
     2. age_in_years (int)
     3. country (str)
@@ -44,13 +44,18 @@ The complete list of the features is listed below:
     4. total_products_added_to_cart
     5. days_since_last_cart_add (int)
 - [SKU based features](https://github.com/rudderlabs/data-apps-ecommerce-template/tree/main/models/data_model/stg_sku_based): Related to the SKU, categories etc. 
-    1. items_purchased_ever (List of unique product items, List[str])
-    2. categories_purchased_ever (List of unique category ids, List[str])
-    3. highest_spent_category (str) (based on the price of the products)
-    4. highest_transacted_category (str)
+    1. items_purchased_ever (List of unique product items, List[str]); Max size is controlled from variable `var_max_list_size`; IF a user has more than this number, such users get null result. If this number is too large, it can create performance issues.
+    2. categories_purchased_ever (List of unique category ids, List[str]); Max size is controlled from variable `var_max_list_size`; IF a user has more than this number, such users get null result. If this number is too large, it can create performance issues.
+    3. highest_spent_category (str) (based on the price of the products); Max size is controlled from variable `var_max_cart_size`; If a user has more than this number of distinct categories, it limits to the random `var_max_cart_size` number of categories. If this number is too large, it can create performance issues.
+    4. highest_transacted_category (str); Max size is controlled from variable `var_max_cart_size`; If a user has more than this number of distinct categories, it limits to the random `var_max_cart_size` number of categories. If this number is too large, it can create performance issues.
 
 ### Prerequisites:
-1. Event-stream sdk implemented following e-commerce event spec
+1. Event-stream sdk implemented following e-commerce event spec. Only below events are required. Within each table, the required columns can be checked from the dbt_project.yml file variables.
+    1.1 tracks
+    1.2 identifies
+    1.3 product_added
+    1.4 checkout_step_completed
+    1.5 order_completed
 2. [RudderStack ID stitch dbt](https://hub.getdbt.com/rudderlabs/id_stitching/latest/) is enabled and an id graph table is generated in the warehouse
 
 ### Setting up
@@ -79,6 +84,8 @@ Along with the above variables, the table names (variables that start with `tbl_
 ### Output:
 The project creates two main output tabels, `event_stream_customer_features` and `event_stream_feature_table`;  The `event_stream_feature_table` has features in long format, with following columns: `user_id, timestamp, feature_name, feature_type, feature_value_<numeric|string|array>`; The same data is presented in a wide form (pivoted data) in `event_stream_customer_features` table with one row per user_id for a given timestamp. 
 
+There are a few other tables that get created, with prefix `stg_`; They are not required beyond the project run and can safely be ignored. At each run, these temp tables get replaced.
+
 ### Point-in-time correctness
 The `end_date` variable in `dbt_project.yml` can be used to generate the features as of some time in the past. The default value is `'now'` which generates the features as of the run timestamp. But if it is modified to some date in the past, only those events till that timestamp are considered to generate the features. This is a valuable functionality while generating training data for various Machine Learning models, which require historical data to train predictive models.
 
@@ -87,6 +94,8 @@ The `end_date` variable in `dbt_project.yml` can be used to generate the feature
 For an easy setup and trial, a synthetic dataset is supplied along with this project in the `seeds_data/` directory. If the data is required, rename the folder name to `seeds`.
 It has simulated users' journeys of five users. This can be loaded in customer warehouse with the command [`dbt seed`](https://docs.getdbt.com/docs/building-a-dbt-project/seeds)
 These create tables with prefix `SEED_`, in the target schema on warehouse. To use them, the table names should also be modified in the `dbt_project.yml` file.
+
 **WARNING**
+
 If there are tables in the warehouse with same name in the target schema, they get replaced with seed file data. Rename the seed files to something unique, in case this situation presents.
 
