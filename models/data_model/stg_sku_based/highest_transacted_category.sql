@@ -1,11 +1,11 @@
 {% if target.type == 'redshift' %}
 
-with numbers as ({{dbt_utils.generate_series(upper_bound=1000)}}),
+with numbers as ({{dbt_utils.generate_series(upper_bound=var('var_max_cart_size'))}}),
 cte_json as ( 
 
     select {{ var('main_id')}}, 
         {{ var('col_ecommerce_order_completed_properties_products')}}, 
-        json_array_length({{ var('col_ecommerce_order_completed_properties_products')}})  as n_array
+        {{ array_size (  var('col_ecommerce_order_completed_properties_products') )}} as n_array
     from {{ ref('stg_order_completed') }}
 
 ), cte_product_data as (

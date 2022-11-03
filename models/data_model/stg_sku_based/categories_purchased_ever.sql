@@ -1,10 +1,10 @@
 {% if target.type == 'redshift' %}
-with numbers as ({{dbt_utils.generate_series(upper_bound=1000)}}),
+with numbers as ({{dbt_utils.generate_series(upper_bound=var('var_max_list_size'))}}),
 cte_json as ( 
 
     select {{ var('main_id')}}, 
         {{ var('col_ecommerce_order_completed_properties_products')}}, 
-        json_array_length({{ var('col_ecommerce_order_completed_properties_products')}})  as n_array
+        {{ array_size ( var('col_ecommerce_order_completed_properties_products') )}}  as n_array
     from {{ ref('stg_order_completed') }}
 
 ), cte_product_data as (
@@ -19,12 +19,19 @@ cte_json as (
         json_extract_path_text(product_array, '{{ var('category_ref_var') }}') as {{ var('category_ref_var') }} 
     from cte_product_data
 
+), cte_users_n_categories as (
+    select {{ var('main_id') }}, count(distinct {{ var('category_ref_var') }}) as n_categories
+    from cte_user_product_category group by 1 
+), cte_user_product_category_eligible_users as (
+    select a.* from cte_user_product_category a inner join cte_users_n_categories b on 
+    a.{{ var('main_id') }} = b.{{ var('main_id') }} where n_categories < {{ var('var_max_list_size') }}
 )
+
 {% endif %}
 select {{ var('main_id')}}, 
 {% if target.type == 'redshift' %}
     {{array_agg( var('category_ref_var') )}} as {{ var('category_ref_var') }}
-from cte_user_product_category
+from cte_user_product_category_eligible_users
 {% else %}
 array_agg(distinct t.value['{{var('category_ref_var')}}']) as {{ var('category_ref_var') }} 
 from {{ ref('stg_order_completed') }} , TABLE(FLATTEN(parse_json({{ var('col_ecommerce_order_completed_properties_products')}}))) t
