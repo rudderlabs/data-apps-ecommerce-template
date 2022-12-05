@@ -30,8 +30,8 @@ models:
 
 vars:
   event_stream_database: 'analytics_db'  #This is the name of database where the event stream tables are all stored
-  event_stream_schema: 'rudderstack_web'     #This is the name of schema where the event stream tables are all stored
-  start_date: '2022-10-15'              #This is the lower bound on date. Only events after this date would be considered. Typically used to ignore data during test setup days. 
+  event_stream_schema: 'DATA_APPS_SIMULATED_ES'     #This is the name of schema where the event stream tables are all stored
+  start_date: '2020-01-01'              #This is the lower bound on date. Only events after this date would be considered. Typically used to ignore data during test setup days. 
   end_date: 'now'                #This is the upper bound on date .Default is 'now'; It can be modified to some old date to create snapshot of features as of an older timestamp
   date_format: 'YYYY-MM-DD'             # This is the date format
   session_cutoff_in_sec: 1800           # A session is a continuous sequence of events, as long as the events are within this interval. If two consecutive events occur at an interval of greater than this, a new session is created.
@@ -43,8 +43,8 @@ vars:
   card_types: ('mastercard', 'visa')    #These are the types of credit cards(in lowercase) that will be considered to check if the user has a credit card 
 
   #table id stitcher
-  tbl_id_stitcher: "{{ source('ecommerce', var('id_stitcher_name')) }}"
-  id_stitcher_name: 'MATERIAL_DOMAIN_PROFILE__IDSTITCHER_DC3F9DA0_12' # Name of the id stitch table. Usually, something like `rs_user_id_graph`
+  tbl_id_stitcher: 'ANALYTICS_DB.dbt_ecommerce_features.e_comm_feature_id_stitcher'
+  id_stitcher_name: 'ANALYTICS_DB.dbt_ecommerce_features.e_comm_feature_id_stitcher' # Name of the id stitch table. Usually, something like `rs_user_id_graph`
   col_id_stitcher_other_id: 'other_id' # Name of the column in id stitch table, where the user_id, email_id etc are present
   
 
@@ -53,7 +53,7 @@ vars:
   #table ecommerce identifies
   tbl_ecommerce_identifies: "{{ source('ecommerce', 'identifies') }}"
   col_ecommerce_identifies_user_id: 'user_id'
-  col_ecommerce_identifies_email: 'email'
+  col_ecommerce_identifies_email: 'properties_email'
   col_ecommerce_identifies_birthday: 'properties_birthday'
   col_ecommerce_identifies_country: 'properties_country'
   col_ecommerce_identifies_timestamp: "{{timestamp_call('timestamp')}}"
@@ -70,22 +70,22 @@ vars:
   #table ecommerce product_added
   tbl_ecommerce_product_added: "{{ source('ecommerce', 'product_added') }}"
   col_ecommerce_product_added_user_id: 'user_id'
-  col_ecommerce_product_added_properties_cart_id: 'cart_id'
+  col_ecommerce_product_added_properties_cart_id: 'properties_cart_id'
   col_ecommerce_product_added_timestamp: "{{timestamp_call('timestamp')}}"
-  properties_product_ref_var: 'product_id' # This is the column name in the product_added table in warehouse. 
+  properties_product_ref_var: 'properties_product_id' # This is the column name in the product_added table in warehouse. 
 
   #table ecommerce order_completed
   tbl_ecommerce_order_completed: "{{ source('ecommerce', 'order_completed') }}"
   col_ecommerce_order_completed_user_id: 'user_id'
-  col_ecommerce_order_completed_properties_total: 'total'
+  col_ecommerce_order_completed_properties_total: 'properties_total'
   col_ecommerce_order_completed_timestamp: "{{timestamp_call('timestamp')}}"
-  col_ecommerce_order_completed_properties_products: 'products'
+  col_ecommerce_order_completed_properties_products: 'properties_products'
   var_max_cart_size: 100
   var_max_list_size: 10
 
   #table ecommerce checkout_step_completed
   tbl_ecommerce_checkout_step_completed: "{{ source('ecommerce', 'checkout_step_completed') }}"
   col_ecommerce_checkout_step_completed_user_id: 'user_id'
-  col_ecommerce_checkout_step_completed_payment_method: 'payment_method'
+  col_ecommerce_checkout_step_completed_payment_method: 'properties_payment_method'
   col_ecommerce_checkout_step_completed_timestamp: "{{timestamp_call('timestamp')}}"
   

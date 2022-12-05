@@ -19,5 +19,5 @@ b.{{ var('col_id_stitcher_other_id')}}  = coalesce(
     {% endfor %}
 )
 {% endif %}
-
+where b.{{ var('main_id') }} is not null
 {% endmacro %}
