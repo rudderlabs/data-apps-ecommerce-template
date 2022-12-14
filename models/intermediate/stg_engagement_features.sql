@@ -8,3 +8,5 @@ select {{ var('main_id')}}, feature_name, {{get_end_timestamp()}} as end_timesta
 union
 {% endfor %}
 select {{ var('main_id')}}, feature_name, {{get_end_timestamp()}} as end_timestamp, feature_value as feature_value_numeric, null as feature_value_string, null as feature_value_array, 'numeric' as feature_type from {{ref('stg_session_features')}}
+union 
+select {{ var('main_id') }}, feature_name, {{get_end_timestamp()}} as end_timestamp, feature_value as feature_value_numeric,  null as feature_value_string, null as feature_value_array, 'numeric' as feature_type from {{ref('stg_pattern_downloaded_features')}}

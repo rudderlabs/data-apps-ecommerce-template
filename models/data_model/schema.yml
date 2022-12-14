@@ -6,17 +6,17 @@ sources:
     schema: "{{var ('event_stream_schema')}}"
     tables:
       - name: tracks
-      - name: product_viewed
-      - name: product_removed
-      - name: product_list_viewed
-      - name: product_list_filtered
-      - name: product_clicked
       - name: product_added
-      - name: products_searched
       - name: order_completed
       - name: identifies
-      - name: complaint_raised
       - name: checkout_step_completed
-      - name: checkout_started
-      - name: cart_viewed
       - name: "{{ var('id_stitcher_name')}}"
+      - name: web_conversion_order_made_success
+      - name: web_product_page_add_to_basket_button_click
+  - name: production
+    database: "{{var('event_stream_database')}}"
+    schema: dbt_production
+    tables:
+      - name: orderitems
+      - name: pattern_downloads
+      - name: user_mapping

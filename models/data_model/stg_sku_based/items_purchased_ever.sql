@@ -1,40 +1,5 @@
-{% if target.type == 'redshift' %}
-with numbers as ({{dbt_utils.generate_series(upper_bound=var('var_max_list_size'))}}),
-cte_json as ( 
-
-    select {{ var('main_id')}}, 
-        {{ var('col_ecommerce_order_completed_properties_products')}}, 
-        {{ array_size ( var('col_ecommerce_order_completed_properties_products') )}}  as n_array
-    from {{ ref('stg_order_completed') }}
-
-), cte_product_data as (
-
-    select {{ var('main_id')}},  
-    json_extract_array_element_text({{ var('col_ecommerce_order_completed_properties_products')}}, generated_number::int, true) as product_array
-    from cte_json a cross join (select generated_number - 1 as generated_number from numbers) b where b.generated_number <= (a.n_array-1)
-
-), cte_user_product_id as (
-
-    select {{ var('main_id')}}, 
-        json_extract_path_text(product_array, '{{ var('product_ref_var') }}') as {{ var('product_ref_var') }} 
-    from cte_product_data
-
-), cte_users_n_products as (
-    select {{ var('main_id') }}, count(distinct {{ var('product_ref_var') }}) as n_products
-    from cte_user_product_id group by 1 
-), cte_user_product_eligible_users as (
-    select a.* from cte_user_product_id a inner join cte_users_n_products b on 
-    a.{{ var('main_id') }} = b.{{ var('main_id') }} where n_products < {{ var('var_max_list_size') }}
-)
-{% endif %}
-select {{ var('main_id')}}, 
-{% if target.type == 'redshift' %}
-    {{array_agg( var('product_ref_var') )}} as {{ var('product_ref_var') }}
-from cte_user_product_eligible_users
-
-{% else %}
-    array_agg(distinct t.value['{{var('product_ref_var')}}']) as {{ var('product_ref_var') }}
-from {{ ref('stg_order_completed') }}, TABLE(FLATTEN(parse_json({{ var('col_ecommerce_order_completed_properties_products')}}))) t
-where {{timebound( var('col_ecommerce_order_completed_timestamp'))}} and {{ var('main_id')}} is not null
-{% endif %}
-group by {{ var('main_id')}}
+with cte_purchased_items as 
+(select a.*, b.item_id from {{ ref('stg_order_completed') }} a left join 
+(select order_id, item_id from {{ source('production', 'orderitems') }}  ) b on a.order_id = b.order_id)
+select {{ var('main_id') }}, listagg( distinct item_id, ', ') as {{ var('product_ref_var') }} from cte_purchased_items
+group by 1
