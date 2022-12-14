@@ -1,3 +1,9 @@
+{% if var('category_ref_var') != '' %}
+  {{config(enabled=True)}}
+{% else %}
+  {{config(enabled=False)}}
+{% endif %}
+
 {% if target.type == 'redshift' %}
 with numbers as ({{dbt_utils.generate_series(upper_bound=var('var_max_cart_size'))}}),
 cte_json as ( 

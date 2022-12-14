@@ -1,1 +1,1 @@
-select {{get_end_date()}}
+select * From lovecrafts.dbt_production.pattern_downloads limit 100
