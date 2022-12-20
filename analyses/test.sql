@@ -1,1 +1,2 @@
-select * From lovecrafts.dbt_production.pattern_downloads limit 100
+
+select count(*) from rudderstack_external.event_stream_customer_features_latest 

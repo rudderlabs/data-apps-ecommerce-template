@@ -31,7 +31,7 @@ from
     end_timestamp, 
     cast(feature_value_numeric as real) as feature_value_numeric,
     cast(feature_value_string as varchar) as feature_value_string, 
-    to_array(feature_value_array ) as feature_value_array, 
+    feature_value_array, 
     feature_type  from {{ref('stg_engagement_features')}}
     union all
     select 
@@ -49,7 +49,7 @@ from
     end_timestamp, 
     cast(feature_value_numeric as real) as feature_value_numeric,
     cast(feature_value_string as varchar) as feature_value_string, 
-    to_array(feature_value_array ) as feature_value_array, 
+    feature_value_array, 
     feature_type  from {{ref('stg_revenue_features')}}
     union all
     select 
