@@ -15,7 +15,7 @@ select {{ var('col_ecommerce_order_completed_user_id') }},
  'current' as tbl_source from cte_id_stitched_order_completed
  union all
  select {{ var('col_ecommerce_order_completed_old_user_id') }}, 
-{{ var('col_ecommerce_order_completed_old_properties_total') }}::real,
+replace({{ var('col_ecommerce_order_completed_old_properties_total') }},',','')::real,
 {{ var('col_ecommerce_order_completed_old_timestamp') }},
 {{ var('col_ecommerce_order_completed_old_properties_products') }}, 
  {{ var('main_id') }}, order_id,

@@ -17,6 +17,6 @@ sources:
     database: "{{var('event_stream_database')}}"
     schema: dbt_production
     tables:
-      - name: orderitems
-      - name: pattern_downloads
+      - name: master_orderitems
+      - name: stg_pattern_downloads
       - name: user_mapping

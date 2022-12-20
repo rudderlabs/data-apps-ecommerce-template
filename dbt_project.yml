@@ -31,7 +31,7 @@ models:
 vars:
   event_stream_database: 'lovecrafts'  #This is the name of database where the event stream tables are all stored
   event_stream_schema: 'rudderstack_web'     #This is the name of schema where the event stream tables are all stored
-  start_date: '2022-12-01'              #This is the lower bound on date. Only events after this date would be considered. Typically used to ignore data during test setup days. 
+  start_date: '2021-01-01'              #This is the lower bound on date. Only events after this date would be considered. Typically used to ignore data during test setup days. 
   end_date: 'now'                #This is the upper bound on date .Default is 'now'; It can be modified to some old date to create snapshot of features as of an older timestamp
   date_format: 'YYYY-MM-DD'             # This is the date format
   session_cutoff_in_sec: 1800           # A session is a continuous sequence of events, as long as the events are within this interval. If two consecutive events occur at an interval of greater than this, a new session is created.
@@ -108,6 +108,6 @@ vars:
 
 
   #table Patterns downloaded
-  tbl_patterns_downloaded: "{{ source('production', 'pattern_downloads') }}"
+  tbl_patterns_downloaded: "{{ source('production', 'stg_pattern_downloads') }}"
   col_patterns_downloaded_user_id: 'user_id'
   col_patterns_downloaded_timestamp: 'download_date'
