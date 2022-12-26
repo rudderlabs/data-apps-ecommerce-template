@@ -17,6 +17,10 @@ sources:
     database: "{{var('event_stream_database')}}"
     schema: dbt_production
     tables:
+      - name: user_mapping
+  - name: rs
+    database: "{{var('event_stream_database')}}"
+    schema: rudderstack_external
+    tables:
       - name: master_orderitems
       - name: stg_pattern_downloads
-      - name: user_mapping
