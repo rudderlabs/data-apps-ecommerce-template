@@ -26,7 +26,6 @@ models:
       +materialized: ephemeral
     intermediate: 
       +materialized: table
-    
 
 vars:
   event_stream_database: 'analytics_db'  #This is the name of database where the event stream tables are all stored
