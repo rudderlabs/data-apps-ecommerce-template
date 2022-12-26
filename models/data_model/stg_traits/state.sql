@@ -1,9 +1,9 @@
-select 
-    distinct {{ var('main_id')}}, 
-    first_value({{ var('col_ecommerce_identifies_state')}}) over(
-        partition by {{ var('main_id')}} 
-        order by case when {{ var('col_ecommerce_identifies_state')}} is not null and {{ var('col_ecommerce_identifies_state')}} != '' then 2 else 1 end desc,  
-        {{ var('col_ecommerce_identifies_timestamp')}} desc {{frame_clause()}}
-    ) as state
-from {{ ref('stg_identifies')}} 
-where {{timebound( var('col_ecommerce_identifies_timestamp'))}} and {{ var('main_id')}} is not null
+
+with cte_user_max_time as 
+(select {{ var('main_id') }}, max({{ var('col_ecommerce_identifies_timestamp') }}) as recent_ts from 
+{{ ref('stg_identifies') }} group by 1
+)
+select a.{{ var('main_id') }}, max({{ var('col_ecommerce_identifies_state') }}) as state from {{ ref('stg_identifies') }} a left join 
+cte_user_max_time b on 
+a.{{ var('main_id') }} = b.{{ var('main_id') }}
+group by 1

@@ -8,7 +8,6 @@ with cte_incremental_ts as (
     ),{{ var('col_ecommerce_tracks_timestamp') }}),0) as incremental_ts 
     from {{ ref('stg_tracks') }} 
     where {{timebound( var('col_ecommerce_tracks_timestamp'))}} and {{ var('main_id')}} is not null
-    order by {{ var('main_id') }}, {{ var('col_ecommerce_tracks_timestamp') }} asc
 
 ), cte_new_session as (
 
@@ -35,4 +34,3 @@ select
     max({{ var('col_ecommerce_tracks_timestamp') }}) as session_end_time 
 from cte_session_id 
 group by {{ var('main_id') }}, session_id
-order by {{ var('main_id') }}, session_id

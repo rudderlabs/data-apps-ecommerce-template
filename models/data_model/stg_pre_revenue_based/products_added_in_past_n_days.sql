@@ -14,6 +14,6 @@ with cte_product_casted as
     {% endfor %}
 )
 
-select main_id, concat(concat('products_added_in_past_', n_value::varchar),'_days') as feature_name, 
+select {{var('main_id')}}, concat(concat('products_added_in_past_', n_value::varchar),'_days') as feature_name, 
 products_added_in_past_n_days AS feature_value
 from cte_products_added_in_past_n_days
